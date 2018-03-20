@@ -31,7 +31,6 @@
   * `username` - *required and unique*
   * `email` - *required and unique*
   * `password` - *required - this must be hashed and can not be stored as plain text*
-  * `findHash` - *unique*
 * use the **express** `Router` to create a custom router for allowing users to **sign up** and **sign in**
 * use the **npm** `dotenv` module to house the following environment variables:
   * `PORT`
