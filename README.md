@@ -2,12 +2,12 @@
 ===
 
 ## Submission Instructions
-  * fork this repository & create a new branch for your work
-  * write all of your code in a directory named `lab-` + `<your name>` **e.g.** `lab-susan`
-  * push to your repository
-  * submit a pull request to this repository
-  * submit a link to your PR in canvas
-  * write a question and observation on canvas
+* fork this repository & create a new branch for your work
+* write all of your code in a directory named `lab-` + `<your name>` **e.g.** `lab-susan`
+* push to your repository
+* submit a pull request to this repository
+* submit a link to your PR in canvas
+* write a question and observation on canvas
 
 ## Learning Objectives  
 * students will be able to create basic authorization middleware
@@ -31,32 +31,39 @@
   * `username` - *required and unique*
   * `email` - *required and unique*
   * `password` - *required - this must be hashed and can not be stored as plain text*
+* Use mongoose middleware to create a pre `'save'` hook that uses `bcrypt` to
+  hash a users password if this is the first time the User instance is being
+  saved.
 * use the **express** `Router` to create a custom router for allowing users to **sign up** and **sign in**
-* use the **npm** `dotenv` module to house the following environment variables:
-  * `PORT`
-  * `MONGODB_URI`
-  * `APP_SECRET` *(used for signing and verify tokens)*
 
 ## Server Endpoints
 ### `/api/signup`
 * `POST` request
-* the client should pass the username and password in the body of the request
-* the server should respond with an object containing user information, without
-  any property representing any for of a users password. Return info like
-  `{username: 'programmer42', email: 'root@aol.com'}`
-* the server should respond with **400 Bad Request** to a failed request
+* The client should pass the username, email and password in the body of the request
+* The server should respond with a **200** status code for a proper request that
+  successfully creates a new user.
+* The server should respond with **400 Bad Request** for a failed request
 
 ### `/api/signin`
 * `GET` request
-* the client should pass the username and password to the server using a `Basic:` authorization header
-* the server should respond with some secret information for authenticated users.
-* the server should respond with **401 Unauthorized** for non-authenticated users.
+* the client should pass the username and password to the server using a `Authorization: Basic Base64(username:password)` header
+* The string `"username:password"` should be Base64 encoded
+* the server should respond with a **200** status code for requests containing
+  legitimate usernames and correct passwords.
+* the server should respond with HTTP status **401 Unauthorized** for non-authenticated users.
 
 ## Tests
-* create a test that will ensure that your API returns a status code of **404** for any routes that have not been registered
+* Move the file `basic-auth.test.js` into your lab directory and configure it
+  to run with your sever.
+* It has tests that check the status code of your signup and signin routes.
 * `/api/signup`
-  * `POST` - test **400**, if no request body has been provided or the body is invalid
-  * `POST` - test **200**, if the request body has been provided and is valid
+  * `POST` - test expects HTTP status **400**, if no request body has been provided or the body is invalid
+  * `POST` - test expects HTTP status **200**, if the request body has been provided and is valid
 * `/api/signin`
-  * `GET` - test **401**, if the user could not be authenticated
-  * `GET` - test **200**, responds with protected information for a request with a valid basic authorization header
+  * `GET` - test expects HTTP status **401**, if the user could not be authenticated due to an incorrect password
+  * `GET` - test expects HTTP status **200**, for a request with a valid basic authorization header
+
+## Stretch Goals
+Add more routes to the server beyond `/api/signin` that check for the
+`Authorization` header and either allow or prevent users from accessing
+addition information.
