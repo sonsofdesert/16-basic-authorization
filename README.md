@@ -66,4 +66,4 @@
 ## Stretch Goals
 Add more routes to the server beyond `/api/signin` that check for the
 `Authorization` header and either allow or prevent users from accessing
-addition information.
+additional information.
